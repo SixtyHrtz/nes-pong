@@ -284,4 +284,4 @@ sounds_data:
 
 .segment "CHARS"
 
-	.incbin "alpha.chr"
+	.incbin "nes-st/tileset.chr"

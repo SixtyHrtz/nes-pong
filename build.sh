@@ -2,7 +2,7 @@
 
 name="main"
 
-cc65 -Oirs $name.c --add-source
+cc65 -Oirs src/$name.c -o $name.s --add-source
 
 ca65 crt0.s
 ca65 $name.s -g
