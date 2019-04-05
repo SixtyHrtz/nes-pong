@@ -4,11 +4,17 @@
         {
             "label": "Build and Run",
             "type": "shell",
-            "command": "sh build.sh",
+            "windows": {
+                "command": "start build.bat"
+            },
+            "linux": {
+                "command": "sh build.sh"
+            },
             "group": "build",
             "presentation": {
                 "reveal": "silent"
-            }
+            },
+            "problemMatcher": []
         }
     ]
 }
