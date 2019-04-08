@@ -4,12 +4,13 @@
 #include "../nes-st/field.h"
 #include "../nes-st/sprites.h"
 
-#pragma bss - name(push, "ZEROPAGE")
+#pragma bss-name(push, "ZEROPAGE")
 
-#define screen_w 255
-#define screen_w_half 127
-#define screen_h 223
-#define screen_h_half 111
+#define screen_w 256
+#define screen_w_half 128
+#define screen_h 224
+#define screen_h_half 112
+#define row_h_skip 7
 
 struct Platform
 {
@@ -31,21 +32,21 @@ struct Ball
 
 struct Platform platform_p1 = {
 	0,
-	screen_h_half - 7,
-	3,
-	31};
+	screen_h_half - 16 + row_h_skip,
+	4 - 1,
+	32 - 1};
 
 struct Platform platform_p2 = {
 	screen_w - 4,
-	screen_h_half - 7,
-	3,
-	31};
+	screen_h_half - 16 + row_h_skip,
+	4 - 1,
+	32 - 1};
 
 struct Ball ball = {
-	screen_w_half - 3,
-	screen_h_half + 4,
-	7,
-	7,
+	screen_w_half - 4,
+	screen_h_half - 4 + row_h_skip,
+	8 - 1,
+	8 - 1,
 	1,
 	1};
 
@@ -77,8 +78,8 @@ void main(void)
 		pad2 = pad_poll(1);
 
 		movement();
-		draw();
 		collision_check();
+		draw();
 	}
 }
 
@@ -88,8 +89,8 @@ void movement(void)
 	{
 		if (pad1 & PAD_START)
 		{
-			platform_p1.y = screen_h_half - 7;
-			platform_p2.y = screen_h_half - 7;
+			platform_p1.y = screen_h_half - 16 + row_h_skip;
+			platform_p2.y = screen_h_half - 16 + row_h_skip;
 			ball.x = screen_w_half;
 			ball.y = screen_h_half;
 			endgame = 0;
@@ -147,6 +148,6 @@ void collision_check(void)
 
 	if (ball.x <= 0)
 		endgame = 1;
-	if (ball.x > screen_w - 8)
+	if (ball.x >= screen_w - 8)
 		endgame = 1;
 }
