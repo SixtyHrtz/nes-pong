@@ -52,7 +52,6 @@ struct Ball ball = {
 
 unsigned char pad1;
 unsigned char pad2;
-unsigned char endgame = 1;
 
 void movement(void);
 void draw(void);
@@ -83,6 +82,8 @@ void main(void)
 	}
 }
 
+unsigned char endgame = 1;
+
 void movement(void)
 {
 	if (endgame == 1)
@@ -91,8 +92,9 @@ void movement(void)
 		{
 			platform_p1.y = screen_h_half - 16 + row_h_skip;
 			platform_p2.y = screen_h_half - 16 + row_h_skip;
-			ball.x = screen_w_half;
-			ball.y = screen_h_half;
+			ball.x = screen_w_half - 4;
+			ball.y = screen_h_half - 4 + row_h_skip;
+
 			endgame = 0;
 		}
 	}
@@ -103,10 +105,20 @@ void movement(void)
 		else if (pad1 & PAD_DOWN)
 			platform_p1.y += 1;
 
+		if (platform_p1.y <= row_h_skip + 4)
+			platform_p1.y = row_h_skip + 4;
+		if (platform_p1.y > screen_h + row_h_skip - 4 - 32)
+			platform_p1.y = screen_h + row_h_skip - 4 - 32;
+
 		if (pad2 & PAD_UP)
 			platform_p2.y -= 1;
 		else if (pad2 & PAD_DOWN)
 			platform_p2.y += 1;
+
+		if (platform_p2.y <= row_h_skip + 4)
+			platform_p2.y = row_h_skip + 4;
+		if (platform_p2.y >= screen_h + row_h_skip - 4 - 32)
+			platform_p2.y = screen_h + row_h_skip - 4 - 32;
 
 		ball.x += ball.x_direction;
 		ball.y += ball.y_direction;
@@ -141,9 +153,9 @@ void collision_check(void)
 		*((unsigned char *)0x4003) = 0x01;
 	}
 
-	if (ball.y <= 4 + 4)
+	if (ball.y <= row_h_skip + 4)
 		ball.y_direction *= -1;
-	if (ball.y >= screen_h - 4 - 4)
+	if (ball.y >= screen_h + row_h_skip - 4 - 8)
 		ball.y_direction *= -1;
 
 	if (ball.x <= 0)
